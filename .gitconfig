@@ -1,0 +1,16 @@
+[user]
+    name = Victor van Poppelen
+    email = vvanpo@gmail.com
+[core]
+    excludesfile = ~/.gitignore
+[push]
+    default = simple
+[rebase]
+    autosquash = true
+[sendemail]
+    smtpEncryption = tls
+    smtpServer = smtp.gmail.com
+    smtpUser = vvanpo@gmail.com
+    smtpServerPort = 587
+[http]
+    cookiefile = ~/.gitcookies

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+env_dir=~/.local/src/github.com/vvanpo/env
+
+mkdir -p "$env_dir"
+
+git clone https://github.com/vvanpo/env.git "$env_dir"
+
+$env_dir/install -p
