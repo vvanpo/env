@@ -38,8 +38,8 @@ function set-prefix {
     # Perform tilde expansion as it won't be expanded automatically in a quoted
     # string.
     prefix="${prefix/#~/$HOME}"
-    # Add a trailing slash if it is missing.
-    [[ $prefix != */ ]] && prefix="$prefix/"
+    # Resolve path.
+    prefix="$(realpath -ms --relative-base ~ "$prefix")"
 }
 
 # Pull down the repo, cloning it if it doesn't exist.
@@ -64,5 +64,5 @@ function pull-repo {
 if [[ $1 != '-s' ]]; then
     set-prefix
     pull-repo
-    #$prefix/src/$repo/install "$prefix"
+    $prefix/src/$repo/install "$prefix"
 fi
