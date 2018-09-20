@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
-name="$1"
-email="$2"
+prefix="$1"
 
-repo='github.com/vvanpo/env'
-# Directories are relative to $HOME.
-prefix="${3:-.local}"
-env="$prefix/src/$repo"
+if [[ -z $prefix ]]; then
+    2>&1 echo "Must provide a prefix path."
+    exit 1
+fi
 
-if [[ ! -d $prefix/bin ]] || [[ ! -e $prefix/bin/update-env ]]; then
+. ~/"$prefix/src/$repo/init" -s
+
+if [[ ! -d $prefix/bin ]] || [[ ! -e $prefix/bin/update-$name ]]; then
     mkdir -p "$prefix/bin"
-    ln -s "../src/$repo/init" "$prefix/bin/update-env"
+    ln -s "../src/$repo/init" "$prefix/bin/update-$name"
 fi
 
 git_version="$(git --version | cut -d' ' -f3)"
@@ -21,16 +22,16 @@ includes=("$github/$git_completion" "$github/$git_prompt")
 
 function install-dot {
     for file in $@; do
-        [[ -e ~/$file ]] && (set -x; rm -f "$HOME/$file")
-        (set -x; ln -s "$env/$file" ~/)
+        [[ -e ~/$file ]] && (set -x; rm -f ~/"$file")
+        (set -x; ln -s "$prefix/src/$repo/$file" ~/"$file")
     done
 }
 
 function install-git {
     install-dot .gitignore
     rm -f ~/.gitconfig
-    git config --global --add user.name "$name"
-    git config --global --add user.email "$email"
+    git config --global --add user.name "$(get-config user.name)"
+    git config --global --add user.email "$(get-config user.email)"
     git config --global --add core.excludesfile '~/.gitignore'
 }
 
@@ -46,6 +47,9 @@ function install-bash {
     done
     >/dev/null cd -
 }
+
+read-config 'user.name' 'Full name'
+read-config 'user.email' 'E-mail'
 
 install-dot .tmux.conf .vimrc
 install-git

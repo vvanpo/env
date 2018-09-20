@@ -10,10 +10,8 @@ function get-config {
 }
 
 function set-config {
-    # Git will error on invalid files.
     if [[ ! -f $prefix/etc/${name}config ]]; then
         mkdir -p "$prefix/etc"
-        touch "$prefix/etc/${name}config"
     fi
 
     git config -f "$prefix/etc/${name}config" --add "$1" "$2"
@@ -23,7 +21,7 @@ function set-config {
 function read-config {
     if [[ -z $(git config -f "$prefix/etc/${name}config" --name-only -l | grep "$1") ]]; then
         local value
-        printf '%s%s%s' "$2" "$([[ -n $3 ]] && echo " [$3]")" ': '
+        printf '%s%s%s' "$2" "${3:+ [$3]}" ': '
         read value
         value="${value:-$3}"
         set-config "$1" "$value"
