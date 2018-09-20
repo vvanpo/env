@@ -5,8 +5,13 @@ email="$2"
 
 repo='github.com/vvanpo/env'
 # Directories are relative to $HOME.
-usr="${3:-.local}"
-env="$usr/src/$repo"
+prefix="${3:-.local}"
+env="$prefix/src/$repo"
+
+if [[ ! -d $prefix/bin ]] || [[ ! -e $prefix/bin/update-env ]]; then
+    mkdir -p "$prefix/bin"
+    ln -s "../src/$repo/init" "$prefix/bin/update-env"
+fi
 
 git_version="$(git --version | cut -d' ' -f3)"
 github='https://raw.githubusercontent.com'
