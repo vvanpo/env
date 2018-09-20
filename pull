@@ -6,4 +6,4 @@ mkdir -p "$env_dir"
 
 git clone https://github.com/vvanpo/env.git "$env_dir"
 
-$env_dir/install -p
+"$env_dir/install" -p

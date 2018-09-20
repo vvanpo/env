@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
-git_completion_url=https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
-git_prompt_url=https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+env_dir=.local/src/github.com/vvanpo/env
+
+home=(.bash_profile .bash_logout .bashrc .gitconfig .gitignore .tmux.conf .vimrc)
+
+github_url=https://raw.githubusercontent.com
+git_completion=git/git/master/contrib/completion/git-completion.bash
+git_prompt=git/git/master/contrib/completion/git-prompt.sh
+
+for file in ${home[@]}; do
+    rm -f ~/$file
+    ln -s "$env_dir/$file" ~/
+done
 
