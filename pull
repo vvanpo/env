@@ -36,4 +36,9 @@ fi
 
 "$env/install" "$name" "$email" "$usr"
 
+if [[ ! -d $usr/bin ]] || [[ ! -e $usr/bin/update-env ]]; then
+    mkdir -p "$usr/bin"
+    ln -s "$env/install" "$usr/bin/update-env"
+fi
+
 >/dev/null cd -

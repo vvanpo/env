@@ -15,7 +15,7 @@ includes=("$github/$git_completion" "$github/$git_prompt")
 
 function install-dot {
     for file in $@; do
-        [[ -e ~/$file ]] && (set -x; rm -f "~/$file")
+        [[ -e ~/$file ]] && (set -x; rm -f "$HOME/$file")
         (set -x; ln -s "$env/$file" ~/)
     done
 }
@@ -34,7 +34,8 @@ function install-bash {
 
     cd ~/.bash
     for url in "${includes[@]}"; do
-        [[ -e $(basename "$url") ]] && (set -x; rm -f "$(basename "$url")")
+        file="$(basename "$url")"
+        [[ -e $file ]] && (set -x; rm -f "$file")
         (set -x; curl -fsSLO "$url")
     done
     >/dev/null cd -
