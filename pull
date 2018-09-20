@@ -4,6 +4,14 @@ env_dir=~/.local/src/github.com/vvanpo/env
 
 mkdir -p "$env_dir"
 
-git clone https://github.com/vvanpo/env.git "$env_dir"
+if [[ -f $env_dir/.git/config ]]; then
+    cd "$env_dir"
+    git stash
+    git checkout master
+    git pull
+    cd -
+else
+    git clone https://github.com/vvanpo/env.git "$env_dir"
+fi
 
 "$env_dir/install" -p
