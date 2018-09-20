@@ -40,7 +40,7 @@ $env/install "$name" "$email" "$usr"
 
 if [[ ! -d $usr/bin ]] || [[ ! -e $usr/bin/update-env ]]; then
     mkdir -p "$usr/bin"
-    ln -s "../src/$repo/install" "$usr/bin/update-env"
+    ln -s "../src/$repo/pull" "$usr/bin/update-env"
 fi
 
 >/dev/null cd -
