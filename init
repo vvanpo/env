@@ -39,12 +39,12 @@ function set-prefix {
     # string.
     prefix="${prefix/#~/$HOME}"
     # Resolve path.
-    prefix="$(realpath -ms --relative-base ~ "$prefix")"
+    prefix="$(realpath -ms "$prefix")"
 }
 
 # Pull down the repo, cloning it if it doesn't exist.
 function pull-repo {
-    local path="$prefix/$repo"
+    local path="$prefix/src/$repo"
     if [[ -d $path/.git ]]; then
         local remote=$(git -C $path config --get remote.origin.url | grep "$repo.git")
         if [[ -z $remote ]]; then
@@ -53,7 +53,7 @@ function pull-repo {
         fi
 
         git -C "$path" checkout -q master
-        git -C "$path" pull -q
+        git -C "$path" pull
     else
         (set -x; git clone "https://$repo.git" "$path")
     fi
