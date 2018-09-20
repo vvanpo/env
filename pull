@@ -5,11 +5,13 @@ env_dir=~/.local/src/github.com/vvanpo/env
 mkdir -p "$env_dir"
 
 if [[ -f $env_dir/.git/config ]]; then
+    if [[ -z $(git config -f "$env_dir/.git/config" --get remote.origin.url | grep "github.com/vvanpo/env.git") ]]; then
+        exit 1
+    fi
     cd "$env_dir"
-    git stash
-    git checkout master
+    git checkout -q master
     git pull
-    cd -
+    >/dev/null cd -
 else
     git clone https://github.com/vvanpo/env.git "$env_dir"
 fi
