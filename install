@@ -1,15 +1,46 @@
 #!/usr/bin/env bash
 
-env_dir=.local/src/github.com/vvanpo/env
+name='Victor van Poppelen'
+email=vvanpo@gmail.com
 
-home=(.bash_profile .bash_logout .bashrc .gitconfig .gitignore .tmux.conf .vimrc)
+repo=github.com/vvanpo/env
+# Directories are relative to $HOME.
+usr=.local
+env="$usr/src/$repo"
 
-github_url=https://raw.githubusercontent.com
+github=https://raw.githubusercontent.com
 git_completion=git/git/master/contrib/completion/git-completion.bash
 git_prompt=git/git/master/contrib/completion/git-prompt.sh
+includes=("$github/$git_completion" "$github/$git_prompt")
 
-for file in ${home[@]}; do
-    rm -f ~/$file
-    ln -s "$env_dir/$file" ~/
-done
+function install-dot {
+    for file in $@; do
+        rm -f ~/$file
+        ln -s "$env/$file" ~/
+    done
+}
 
+function install-bash {
+    install-dot .bashrc .bash_profile .bash_logout
+    mkdir -p ~/.bash
+
+    cd ~/.bash
+    for url in "${includes[@]}"; do
+        curl -fsSLO "$url"
+    done
+    >/dev/null cd -
+
+    . ~/.bashrc
+}
+
+function install-git {
+    install-dot .gitignore
+    rm -f ~/.gitconfig
+    git config --global --add user.name "$name"
+    git config --global --add user.email "$email"
+    git config --global --add core.excludesfile '~/.gitignore'
+}
+
+install-dot .tmux.conf .vimrc
+install-git
+install-bash

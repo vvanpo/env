@@ -40,21 +40,13 @@ else
 fi
 
 PS1_POSTFIX=" $BOLD$BLUE\w\n\$$RST "
-
-# Provides the __git_ps1 function.
-if [[ -f ~/.git-prompt.sh ]]; then
-    . ~/.git-prompt.sh
-    PS1=$PS1_PREFIX'$(__git_ps1)'$PS1_POSTFIX
-    # Displays a '*' or '+' for unstaged or staged changes.
-    export GIT_PS1_SHOWDIRTYSTATE=true
-    # Displays a '$' for stashed files.
-    export GIT_PS1_SHOWSTASHSTATE=true
-    # Displays a '%' for untracked files.
-    export GIT_PS1_SHOWUNTRACKEDFILES=true
-else
-    PS1=$PS1_PREFIX$PS1_POSTFIX
-fi
-
+PS1=$PS1_PREFIX'$(__git_ps1)'$PS1_POSTFIX
+# Displays a '*' or '+' for unstaged or staged changes.
+export GIT_PS1_SHOWDIRTYSTATE=true
+# Displays a '$' for stashed files.
+export GIT_PS1_SHOWSTASHSTATE=true
+# Displays a '%' for untracked files.
+export GIT_PS1_SHOWUNTRACKEDFILES=true
 # Sets the prompt for `sudo su`.
 export SUDO_PS1=$PS1_PREFIX$PS1_POSTFIX
 # Secondary prompt for multi-line commands.
@@ -62,5 +54,7 @@ PS2="  $BLUE>$RST "
 # Trims the path to 3 components in the PS1, replacing it with an ellipsis.
 PROMPT_DIRTRIM=3
 
-## Source host-specific script.
-[[ -f ~/.bashrc-host ]] && . ~/.bashrc-host
+## Source files from includes directory.
+for script in ~/.bash/*; do
+    . $script
+done
