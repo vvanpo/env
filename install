@@ -7,7 +7,7 @@ if [[ -z $prefix ]]; then
     exit 1
 fi
 
-. "$prefix/src/$repo/init" -s
+. "$(dirname "$0")/init" -s
 
 if [[ ! -d $prefix/bin ]] || [[ ! -e $prefix/bin/update-$name ]]; then
     mkdir -p "$prefix/bin"

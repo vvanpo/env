@@ -19,7 +19,13 @@ function set-config {
 
 # Reads an input value if the requested config value isn't set.
 function read-config {
-    if [[ -z $(git config -f "$prefix/etc/${name}config" --name-only -l | grep "$1") ]]; then
+    if [[ -f $prefix/etc/${name}config ]]; then
+        if [[ -n $(git config -f "$prefix/etc/${name}config" --name-only -l | grep "$1") ]]; then
+            local isset="true"
+        fi
+    fi
+
+    if [[ -z $isset ]]; then
         local value
         printf '%s%s%s' "$2" "${3:+ [$3]}" ': '
         read value
