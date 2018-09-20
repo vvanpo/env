@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+repo=github.com/vvanpo/env
+
 cd
 
 while [[ -z $name ]]; do
@@ -20,25 +22,25 @@ usr="${usr:-.local}"
 usr="${usr/#~\//}"
 [[ -n $usr ]] && usr_prefix="$usr/"
 
-env="${usr_prefix}src/github.com/vvanpo/env"
+env="${usr_prefix}src/$repo"
 mkdir -p "$env"
 
 if [[ -f $env/.git/config ]]; then
-    remote=$(git config -f "$env/.git/config" --get remote.origin.url | grep "github.com/vvanpo/env.git")
+    remote=$(git config -f "$env/.git/config" --get remote.origin.url | grep "$repo.git")
     [[ -z $remote ]] && exit 1
     cd "$env"
     git checkout -q master
     git pull -q
     >/dev/null cd -
 else
-    git clone https://github.com/vvanpo/env.git "$env"
+    git clone "https://$repo.git" "$env"
 fi
 
-"$env/install" "$name" "$email" "$usr"
+$env/install "$name" "$email" "$usr"
 
 if [[ ! -d $usr/bin ]] || [[ ! -e $usr/bin/update-env ]]; then
     mkdir -p "$usr/bin"
-    ln -s "$env/install" "$usr/bin/update-env"
+    ln -s "../src/$repo/install" "$usr/bin/update-env"
 fi
 
 >/dev/null cd -
