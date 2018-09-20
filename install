@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-name='Victor van Poppelen'
-email=vvanpo@gmail.com
+name="$1"
+email="$2"
 
 repo=github.com/vvanpo/env
 # Directories are relative to $HOME.
-usr=.local
+usr="${3:-.local}"
 env="$usr/src/$repo"
 
 github=https://raw.githubusercontent.com
@@ -15,22 +15,9 @@ includes=("$github/$git_completion" "$github/$git_prompt")
 
 function install-dot {
     for file in $@; do
-        rm -f ~/$file
-        ln -s "$env/$file" ~/
+        [[ -e ~/$file ]] && (set -x; rm -f "~/$file")
+        (set -x; ln -s "$env/$file" ~/)
     done
-}
-
-function install-bash {
-    install-dot .bashrc .bash_profile .bash_logout
-    mkdir -p ~/.bash
-
-    cd ~/.bash
-    for url in "${includes[@]}"; do
-        curl -fsSLO "$url"
-    done
-    >/dev/null cd -
-
-    . ~/.bashrc
 }
 
 function install-git {
@@ -39,6 +26,18 @@ function install-git {
     git config --global --add user.name "$name"
     git config --global --add user.email "$email"
     git config --global --add core.excludesfile '~/.gitignore'
+}
+
+function install-bash {
+    install-dot .bashrc .bash_profile .bash_logout
+    mkdir -p ~/.bash
+
+    cd ~/.bash
+    for url in "${includes[@]}"; do
+        [[ -e $(basename "$url") ]] && (set -x; rm -f "$(basename "$url")")
+        (set -x; curl -fsSLO "$url")
+    done
+    >/dev/null cd -
 }
 
 install-dot .tmux.conf .vimrc

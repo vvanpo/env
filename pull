@@ -1,19 +1,39 @@
 #!/usr/bin/env bash
 
-env_dir=~/.local/src/github.com/vvanpo/env
+cd
 
-mkdir -p "$env_dir"
+while [[ -z $name ]]; do
+    echo -n 'Full name: '
+    read name
+done
 
-if [[ -f $env_dir/.git/config ]]; then
-    if [[ -z $(git config -f "$env_dir/.git/config" --get remote.origin.url | grep "github.com/vvanpo/env.git") ]]; then
-        exit 1
-    fi
-    cd "$env_dir"
+while [[ -z $email ]]; do
+    echo -n 'E-mail: '
+    read email
+done
+
+echo -n 'Local installation directory [~/.local]: '
+read usr
+usr="${usr:-.local}"
+# We only strip home directory expansion after we've checked for empty input, to
+# account for the edge-case of specifying ~/ as the install directory.
+usr="${usr/#~\//}"
+[[ -n $usr ]] && usr_prefix="$usr/"
+
+env="${usr_prefix}src/github.com/vvanpo/env"
+mkdir -p "$env"
+
+if [[ -f $env/.git/config ]]; then
+    remote=$(git config -f "$env/.git/config" --get remote.origin.url | grep "github.com/vvanpo/env.git")
+    [[ -z $remote ]] && exit 1
+    cd "$env"
     git checkout -q master
-    git pull
+    git pull -q
     >/dev/null cd -
 else
-    git clone https://github.com/vvanpo/env.git "$env_dir"
+    git clone https://github.com/vvanpo/env.git "$env"
 fi
 
-"$env_dir/install" -p
+"$env/install" "$name" "$email" "$usr"
+
+>/dev/null cd -
