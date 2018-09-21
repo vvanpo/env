@@ -1,10 +1,7 @@
 
-function config (
+function config {(
     local file=$PREFIX/src/$REPO/default.config
-
-    if [[ -f $PREFIX/etc/$NAME/config ]]; then
-        file=$PREFIX/etc/$NAME/config
-    fi
+    umask 0077
 
     case "$1" in
     '--add')
@@ -14,8 +11,12 @@ function config (
         fi ;;
     esac
 
+    if [[ -f $PREFIX/etc/$NAME/config ]]; then
+        file=$PREFIX/etc/$NAME/config
+    fi
+
     git config -f "$file" "$@"
-)
+)}
 
 # Reads an input value if the requested config value isn't set.
 function read-config {
