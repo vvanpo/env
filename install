@@ -7,32 +7,31 @@ if [[ -z $prefix ]]; then
     exit 1
 fi
 
-. "$(dirname "$0")/init" -s
-
-if [[ ! -d $prefix/bin ]] || [[ ! -e $prefix/bin/update-$name ]]; then
-    mkdir -p "$prefix/bin"
-    ln -s "../src/$repo/init" "$prefix/bin/update-$name"
-fi
-
 git_version="$(git --version | cut -d' ' -f3)"
-github='https://raw.githubusercontent.com'
-git_completion="git/git/v${git_version}/contrib/completion/git-completion.bash"
-git_prompt="git/git/v${git_version}/contrib/completion/git-prompt.sh"
-includes=("$github/$git_completion" "$github/$git_prompt")
+
+function install-link {
+    if [[ -e $2 ]]; then
+        (set -x; rm -f "$2")
+    else
+        mkdir -p "$(dirname "$2")"
+    fi
+
+    (set -x; ln -s "$prefix/src/$repo/$1" "$2")
+}
 
 function install-dot {
     for file in $@; do
-        [[ -e ~/$file ]] && (set -x; rm -f ~/"$file")
-        (set -x; ln -s "$prefix/src/$repo/$file" ~/"$file")
+        install-link $file ~/"$file"
     done
 }
 
 function install-git {
-    install-dot .gitignore
+    local gitignore="$(dirname "$(config)")/gitignore"
+    install-link .gitignore "$gitignore"
     rm -f ~/.gitconfig
     git config --global --add user.name "$(get-config user.name)"
     git config --global --add user.email "$(get-config user.email)"
-    git config --global --add core.excludesfile '~/.gitignore'
+    git config --global --add core.excludesfile "$gitignore"
 }
 
 function install-bash {
@@ -47,6 +46,9 @@ function install-bash {
     done
     >/dev/null cd -
 }
+
+. "$(dirname "$0")/init" -s
+install-link 'init' "$prefix/bin/update-$name"
 
 read-config 'user.name' 'Full name'
 read-config 'user.email' 'E-mail'

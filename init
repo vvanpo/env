@@ -4,23 +4,27 @@ name='env'
 repo="github.com/vvanpo/$name"
 default_prefix='~/.local'
 
+function config {
+    echo $prefix/etc/$name/config
+}
+
 function get-config {
-    [[ -f $prefix/etc/${name}config ]] || return
-    echo "$(git config -f "$prefix/etc/${name}config" --get "$1")"
+    [[ -f $(config) ]] || return
+    echo "$(git config -f "$(config)" --get "$1")"
 }
 
 function set-config {
-    if [[ ! -f $prefix/etc/${name}config ]]; then
-        mkdir -p "$prefix/etc"
+    if [[ ! -f $(config) ]]; then
+        mkdir -p "$(dirname "$(config)")"
     fi
 
-    git config -f "$prefix/etc/${name}config" --add "$1" "$2"
+    git config -f "$(config)" --add "$1" "$2"
 }
 
 # Reads an input value if the requested config value isn't set.
 function read-config {
-    if [[ -f $prefix/etc/${name}config ]]; then
-        if [[ -n $(git config -f "$prefix/etc/${name}config" --name-only -l | grep "$1") ]]; then
+    if [[ -f $(config) ]]; then
+        if [[ -n $(git config -f "$(config)" --name-only -l | grep "$1") ]]; then
             local isset='true'
         fi
     fi
@@ -50,7 +54,7 @@ function set-prefix {
 function pull-repo {
     local path="$prefix/src/$repo"
     if [[ -d $path/.git ]]; then
-        local remote=$(git -C $path config --get remote.origin.url | grep "$repo")
+        local remote=$(git -C "$path" config --get remote.origin.url | grep "$repo")
         if [[ -z $remote ]]; then
             2>&1 echo 'The repository exists, but does not point to the correct origin.'
             exit 1
