@@ -1,29 +1,23 @@
-if [[ -z $PREFIX ]]; then
-    2>&1 echo "Must provide a prefix path."
-    exit 1
-fi
-
 git_version="$(git --version | cut -d' ' -f3)"
 
-function install-link {
-    if [[ -e $2 ]]; then
-        (set -x; rm -f "$2")
-    else
+# The target should be a filename, not a directory.
+function install-file {
+    if [[ ! -d $(dirname "$2") ]]; then
         mkdir -p "$(dirname "$2")"
     fi
 
-    (set -x; ln -s "$PREFIX/src/$repo/$1" "$2")
+    (set -x; cp "$PREFIX/src/$repo/$1" "$2")
 }
 
 # Installs dot-files that live in ~/.
 function install-dot {
-    for file in $@; do
-        install-link $file ~/"$file"
+    for file in "$@"; do
+        install-file "$file" ~/"$file"
     done
 }
 
 function install-git {
-    local gitignore="$(dirname "$(config)")/gitignore"
+    local gitignore="$PREFIX/etc/$name/gitignore"
     install-link .gitignore "$gitignore"
     rm -f ~/.gitconfig
     git config --global --add user.name "$(get-config user.name)"
@@ -34,17 +28,14 @@ function install-git {
 function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
     mkdir -p ~/.bash
+    files=$(git config -f "$(config-file)" --get-all includes.bash.file)
 
-    cd ~/.bash
-    for url in "$(get-config )"; do
-        local file="$(basename "$url")"
-        [[ -e $file ]] && (set -x; rm -f "$file")
-        (set -x; curl -fsSLO "$url")
+    for file in $files; do
+        install-file "$file" ~/.bash/
     done
-    >/dev/null cd -
 }
 
-install-link 'init' "$prefix/bin/update-$name"
+install-file 'init' "$PREFIX/bin/update-$name"
 
 read-config 'user.name' 'Full name'
 read-config 'user.email' 'E-mail'
