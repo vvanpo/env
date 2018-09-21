@@ -1,8 +1,11 @@
 git_version="$(git --version | cut -d' ' -f3)"
 
-# The target should be a filename, not a directory.
 function install-file {
-    if [[ ! -d $(dirname "$2") ]]; then
+    if [[ -e $2 ]] && [[ ! -d $2 ]]; then
+        rm -f "$2"
+    elif [[ ${2%%/} != $2 ]]; then
+        mkdir -p "$2"
+    else
         mkdir -p "$(dirname "$2")"
     fi
 
@@ -18,7 +21,7 @@ function install-dot {
 
 function install-git {
     local gitignore="$PREFIX/etc/$name/gitignore"
-    install-link .gitignore "$gitignore"
+    install-file .gitignore "$gitignore"
     rm -f ~/.gitconfig
     git config --global --add user.name "$(get-config user.name)"
     git config --global --add user.email "$(get-config user.email)"
