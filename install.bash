@@ -18,17 +18,23 @@ function install-dot {
     done
 }
 
+function install-etc {
+    for file in "$@"; do
+        install-file "$file" "$PREFIX/etc/$NAME/$file"
+    done
+}
+
 function install-git {
-    local gitignore="$PREFIX/etc/$NAME/gitignore"
-    install-file .gitignore "$gitignore"
     rm -f ~/.gitconfig
     git config --global --add user.name "$(config --get user.name)"
     git config --global --add user.email "$(config --get user.email)"
-    git config --global --add core.excludesfile "$gitignore"
+    install-etc gitignore
+    git config --global --add core.excludesfile "$PREFIX/etc/$NAME/gitignore"
 }
 
 function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
+    install-etc inputrc
 
     # Our .bashrc can't load scripts without knowing the folder hierarchy.
     for var in NAME REPO PREFIX; do
