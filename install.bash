@@ -23,17 +23,16 @@ function install-git {
     local gitignore="$PREFIX/etc/$name/gitignore"
     install-file .gitignore "$gitignore"
     rm -f ~/.gitconfig
-    git config --global --add user.name "$(get-config user.name)"
-    git config --global --add user.email "$(get-config user.email)"
+    git config --global --add user.name "$(config --get user.name)"
+    git config --global --add user.email "$(config --get user.email)"
     git config --global --add core.excludesfile "$gitignore"
 }
 
 function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
     mkdir -p ~/.bash
-    files=$(git config -f "$(config-file)" --get-all includes.bash.file)
 
-    for file in $files; do
+    for file in $(config --get-all includes.bash.file); do
         install-file "$file" ~/.bash/
     done
 }
