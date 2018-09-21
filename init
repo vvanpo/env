@@ -5,6 +5,17 @@ readonly REPO="github.com/vvanpo/$NAME"
 readonly default_prefix='~/.local'
 export PREFIX NAME REPO
 
+function install-deps {
+    if [[ $(uname) == 'Darwin' ]]; then
+        if [[ -z $(which brew) ]]; then
+            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            (set -x; brew install git)
+            # Needed for `realpath`.
+            (set -x; brew install coreutils)
+        fi
+    fi
+}
+
 # Sets the `$PREFIX` variable.
 function set-prefix {
     echo -n "Local installation hierarchy [$default_prefix]: "
@@ -32,17 +43,6 @@ function pull-repo {
         git -C "$path" pull
     else
         (set -x; git clone "https://$REPO.git" "$path")
-    fi
-}
-
-function install-deps {
-    if [[ $(uname) == 'Darwin' ]]; then
-        if [[ -z $(which brew) ]]; then
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-            (set -x; brew install git)
-            # Needed for `realpath`
-            (set -x; brew install coreutils)
-        fi
     fi
 }
 
