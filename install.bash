@@ -12,9 +12,10 @@ function install-link {
         mkdir -p "$(dirname "$2")"
     fi
 
-    (set -x; ln -s "$prefix/src/$repo/$1" "$2")
+    (set -x; ln -s "$PREFIX/src/$repo/$1" "$2")
 }
 
+# Installs dot-files that live in ~/.
 function install-dot {
     for file in $@; do
         install-link $file ~/"$file"
@@ -35,7 +36,7 @@ function install-bash {
     mkdir -p ~/.bash
 
     cd ~/.bash
-    for url in "${includes[@]}"; do
+    for url in "$(get-config )"; do
         local file="$(basename "$url")"
         [[ -e $file ]] && (set -x; rm -f "$file")
         (set -x; curl -fsSLO "$url")
@@ -43,7 +44,6 @@ function install-bash {
     >/dev/null cd -
 }
 
-. "$(dirname "$0")/init" -s
 install-link 'init' "$prefix/bin/update-$name"
 
 read-config 'user.name' 'Full name'
