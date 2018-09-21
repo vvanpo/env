@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-name='env'
-repo="github.com/vvanpo/$name"
-default_prefix='~/.local'
+readonly name='env'
+readonly repo="github.com/vvanpo/$name"
+readonly default_prefix='~/.local'
+export PREFIX
 
 function config {
-    echo $prefix/etc/$name/config
+    echo $PREFIX/etc/$name/config
 }
 
 function get-config {
@@ -38,21 +39,21 @@ function read-config {
     fi
 }
 
-# Sets a global `$prefix` variable.
+# Sets the `$PREFIX` variable.
 function set-prefix {
     echo -n "Local installation hierarchy [$default_prefix]: "
-    read prefix
-    prefix="${prefix:-$default_prefix}"
+    read PREFIX
+    PREFIX="${PREFIX:-$default_prefix}"
     # Perform tilde expansion as it won't be expanded automatically in a quoted
     # string.
-    prefix="${prefix/#~/$HOME}"
+    PREFIX="${PREFIX/#~/$HOME}"
     # Resolve path.
-    prefix="$(realpath -ms "$prefix")"
+    PREFIX="$(realpath -ms "$PREFIX")"
 }
 
 # Pull down the repo, cloning it if it doesn't exist.
 function pull-repo {
-    local path="$prefix/src/$repo"
+    local path="$PREFIX/src/$repo"
     if [[ -d $path/.git ]]; then
         local remote=$(git -C "$path" config --get remote.origin.url | grep "$repo")
         if [[ -z $remote ]]; then
@@ -84,5 +85,5 @@ if [[ $1 != '-s' ]]; then
     install-deps
     set-prefix
     pull-repo
-    $prefix/src/$repo/install "$prefix"
+    . $PREFIX/src/$repo/install "$PREFIX"
 fi

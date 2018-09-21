@@ -1,8 +1,4 @@
-#!/usr/bin/env bash
-
-prefix="$1"
-
-if [[ -z $prefix ]]; then
+if [[ -z $PREFIX ]]; then
     2>&1 echo "Must provide a prefix path."
     exit 1
 fi
