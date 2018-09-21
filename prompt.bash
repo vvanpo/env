@@ -1,5 +1,5 @@
-prefix=${bold}${green}\u${reset}:
-[[ $SSH_CLIENT ]] && prefix=ssh://${bold}${green}\u${default}@${red}\H${reset}:
+prefix="${bold}${green}\u${reset}:"
+[[ $SSH_CLIENT ]] && prefix="ssh://${bold}${green}\u${default}@${red}\H${reset}:"
 postfix=" ${bold}${blue}\w\n\$${reset} "
 
 PS1=$prefix'$(__git_ps1)'$postfix
