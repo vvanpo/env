@@ -2,18 +2,21 @@
 # interactive shell and exit otherwise.
 [[ -z $PS1 ]] && return
 
+name=
+repo=
+prefix=
+
 ## Shell configuration and variables
 set -o vi
-path=~/.local
 export EDITOR=vim VISUAL=vim
-export INPUTRC=~/.bash/inputrc
+export INPUTRC=$prefix/etc/$name/inputrc
 export PAGER='less -RSW'
 export LESSHISTFILE=-
-export XDG_DATA_HOME=$path/share
-export XDG_CONFIG_HOME=$path/etc
-export GOPATH=$path
-export PATH=$path/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-export MANPATH=$path/share/man:/usr/local/share/man:/usr/share/man
+export XDG_DATA_HOME=$prefix/share
+export XDG_CONFIG_HOME=$prefix/etc
+export GOPATH=$prefix
+export PATH=$prefix/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export MANPATH=$prefix/share/man:/usr/local/share/man:/usr/share/man
 
 ## Aliases
 alias ls='ls --color=always' l='ls -lah' ll='l | r'
@@ -43,11 +46,11 @@ fi
 PS1_POSTFIX=" $BOLD$BLUE\w\n\$$RST "
 PS1=$PS1_PREFIX'$(__git_ps1)'$PS1_POSTFIX
 # Displays a '*' or '+' for unstaged or staged changes.
-export GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWDIRTYSTATE=true
 # Displays a '$' for stashed files.
-export GIT_PS1_SHOWSTASHSTATE=true
+GIT_PS1_SHOWSTASHSTATE=true
 # Displays a '%' for untracked files.
-export GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWUNTRACKEDFILES=true
 # Sets the prompt for `sudo su`.
 export SUDO_PS1=$PS1_PREFIX$PS1_POSTFIX
 # Secondary prompt for multi-line commands.
@@ -56,6 +59,6 @@ PS2="  $BLUE>$RST "
 PROMPT_DIRTRIM=3
 
 ## Source files from includes directory.
-for script in ~/.bash/*; do
-    . $script
+for script in "$prefix/lib/$name/bash/"*; do
+    . "$script"
 done

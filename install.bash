@@ -30,6 +30,11 @@ function install-git {
 function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
 
+    # Our .bashrc can't load scripts without knowing the folder hierarchy.
+    for var in NAME REPO PREFIX; do
+        sed -i -E "s;^(${var,,}=)$;\1${!var};" ~/.bashrc
+    done
+
     for file in $(config --get-all includes.bash.file); do
         install-file "$file" "$PREFIX/lib/$NAME/bash/"
     done
