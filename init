@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-readonly name='env'
-readonly repo="github.com/vvanpo/$name"
+readonly NAME='env'
+readonly REPO="github.com/vvanpo/$NAME"
 readonly default_prefix='~/.local'
-export PREFIX
+export PREFIX NAME REPO
 
 # Sets the `$PREFIX` variable.
 function set-prefix {
@@ -19,10 +19,10 @@ function set-prefix {
 
 # Pull down the repo, cloning it if it doesn't exist.
 function pull-repo {
-    local path="$PREFIX/src/$repo"
+    local path="$PREFIX/src/$REPO"
 
     if [[ -d $path/.git ]]; then
-        local remote=$(git -C "$path" config --get remote.origin.url | grep "$repo")
+        local remote=$(git -C "$path" config --get remote.origin.url | grep "$REPO")
         if [[ -z $remote ]]; then
             2>&1 echo 'The repository exists, but does not point to the correct origin.'
             exit 1
@@ -31,7 +31,7 @@ function pull-repo {
         git -C "$path" checkout -q master
         git -C "$path" pull
     else
-        (set -x; git clone "https://$repo.git" "$path")
+        (set -x; git clone "https://$REPO.git" "$path")
     fi
 }
 
@@ -49,5 +49,5 @@ function install-deps {
 install-deps
 set-prefix
 pull-repo
-. "$PREFIX/src/$repo/config.bash"
-. "$PREFIX/src/$repo/install.bash"
+. "$PREFIX/src/$REPO/config.bash"
+. "$PREFIX/src/$REPO/install.bash"

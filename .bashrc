@@ -6,6 +6,7 @@
 set -o vi
 path=~/.local
 export EDITOR=vim VISUAL=vim
+export INPUTRC=~/.bash/inputrc
 export PAGER='less -RSW'
 export LESSHISTFILE=-
 export XDG_DATA_HOME=$path/share
@@ -13,7 +14,6 @@ export XDG_CONFIG_HOME=$path/etc
 export GOPATH=$path
 export PATH=$path/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export MANPATH=$path/share/man:/usr/local/share/man:/usr/share/man
-export INPUTRC=~/.bash/inputrc
 
 ## Aliases
 alias ls='ls --color=always' l='ls -lah' ll='l | r'

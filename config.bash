@@ -1,21 +1,21 @@
 
-function config {
-    local file=$PREFIX/src/$repo/default.config
+function config (
+    local file=$PREFIX/src/$REPO/default.config
 
-    if [[ -f $PREFIX/etc/$name/config ]]; then
-        file=$PREFIX/etc/$name/config
+    if [[ -f $PREFIX/etc/$NAME/config ]]; then
+        file=$PREFIX/etc/$NAME/config
     fi
 
     case "$1" in
     '--add')
-        if [[ ! -f $PREFIX/etc/$name/config ]]; then
-            mkdir -p "$PREFIX/etc/$name"
-            cp "$PREFIX/src/$repo/default.config" "$PREFIX/etc/$name/config"
+        if [[ ! -f $PREFIX/etc/$NAME/config ]]; then
+            mkdir -p "$PREFIX/etc/$NAME"
+            cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config"
         fi ;;
     esac
 
     git config -f "$file" "$@"
-}
+)
 
 # Reads an input value if the requested config value isn't set.
 function read-config {

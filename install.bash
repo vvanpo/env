@@ -1,4 +1,3 @@
-git_version="$(git --version | cut -d' ' -f3)"
 
 function install-file {
     if [[ -e $2 ]] && [[ ! -d $2 ]]; then
@@ -9,7 +8,7 @@ function install-file {
         mkdir -p "$(dirname "$2")"
     fi
 
-    (set -x; cp "$PREFIX/src/$repo/$1" "$2")
+    (set -x; cp "$PREFIX/src/$REPO/$1" "$2")
 }
 
 # Installs dot-files that live in ~/.
@@ -20,7 +19,7 @@ function install-dot {
 }
 
 function install-git {
-    local gitignore="$PREFIX/etc/$name/gitignore"
+    local gitignore="$PREFIX/etc/$NAME/gitignore"
     install-file .gitignore "$gitignore"
     rm -f ~/.gitconfig
     git config --global --add user.name "$(config --get user.name)"
@@ -30,14 +29,11 @@ function install-git {
 
 function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
-    mkdir -p ~/.bash
 
     for file in $(config --get-all includes.bash.file); do
-        install-file "$file" ~/.bash/
+        install-file "$file" "$PREFIX/lib/$NAME/bash/"
     done
 }
-
-install-file 'init' "$PREFIX/bin/update-$name"
 
 read-config 'user.name' 'Full name'
 read-config 'user.email' 'E-mail'
