@@ -2,8 +2,9 @@
 
 readonly NAME=env
 readonly REPO=github.com/vvanpo/$NAME
-readonly default_prefix='~/.local'
 export PREFIX NAME REPO
+
+readonly default_prefix='~/.local'
 
 function install-deps {
     if [[ $(uname) == 'Darwin' ]]; then

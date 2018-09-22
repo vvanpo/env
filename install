@@ -43,11 +43,11 @@ function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
     install-etc inputrc
 
-    # Scripts need knowledge of the folder hierarchy.
+    # Include scripts need knowledge of the folder hierarchy.
     for var in NAME REPO PREFIX; do
-        echo "${var,,}=${!var}" >> ~/.bashrc
+        echo "readonly ${var}=${!var}" >> ~/.bashrc
     done
-    echo >> ~/.bashrc
+    echo -e 'export NAME REPO PREFIX\n' >> ~/.bashrc
 
     # Install include scripts and source them.
     for file in $(config --get-all includes.bash.file); do

@@ -33,7 +33,7 @@ filetype plugin indent on
 au BufRead,BufNewFile *.tmpl set filetype=html
 au BufRead,BufNewFile *.vue set filetype=js
 
-au FileType go,sql setlocal noexpandtab
+au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
 
 " ctags
