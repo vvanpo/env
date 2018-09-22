@@ -52,4 +52,4 @@ function pull-repo {
 install-deps
 set-prefix
 pull-repo
-"$PREFIX/src/$REPO/install.bash"
+"$PREFIX/src/$REPO/install"
