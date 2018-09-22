@@ -7,47 +7,47 @@ export PREFIX NAME REPO
 readonly default_prefix='~/.local'
 
 function install-deps {
-    if [[ $(uname) == 'Darwin' ]]; then
-        if [[ -z $(which brew) ]]; then
-            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-            # Upgrade to bash 4.
-            (set -x; brew install bash)
-            (set -x; brew install gnu-sed --with-default-names)
-            (set -x; brew install git)
-            # Needed for `realpath`.
-            (set -x; brew install coreutils)
-        fi
-    fi
+	if [[ $(uname) == 'Darwin' ]]; then
+		if [[ -z $(which brew) ]]; then
+			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+			# Upgrade to bash 4.
+			(set -x; brew install bash)
+			(set -x; brew install gnu-sed --with-default-names)
+			(set -x; brew install git)
+			# Needed for `realpath`.
+			(set -x; brew install coreutils)
+		fi
+	fi
 }
 
 # Sets the PREFIX environment variable.
 function set-prefix {
-    echo -n "Local installation hierarchy [$default_prefix]: "
-    read PREFIX
-    PREFIX=${PREFIX:-$default_prefix}
-    # Perform manual tilde expansion as it won't be expanded automatically in a
-    # quoted string.
-    PREFIX=${PREFIX/#~/$HOME}
-    # Resolve path.
-    PREFIX=$(realpath -ms "$PREFIX")
+	echo -n "Local installation hierarchy [$default_prefix]: "
+	read PREFIX
+	PREFIX=${PREFIX:-$default_prefix}
+	# Perform manual tilde expansion as it won't be expanded automatically in a
+	# quoted string.
+	PREFIX=${PREFIX/#~/$HOME}
+	# Resolve path.
+	PREFIX=$(realpath -ms "$PREFIX")
 }
 
 # Pull down the repo, cloning it if it doesn't exist.
 function pull-repo {
-    local path="$PREFIX/src/$REPO"
+	local path="$PREFIX/src/$REPO"
 
-    if [[ -d $path/.git ]]; then
-        local remote=$(git -C "$path" config --get remote.origin.url | grep "$REPO")
-        if [[ -z $remote ]]; then
-            2>&1 echo 'The repository exists, but does not point to the correct origin.'
-            exit 1
-        fi
+	if [[ -d $path/.git ]]; then
+		local remote=$(git -C "$path" config --get remote.origin.url | grep "$REPO")
+		if [[ -z $remote ]]; then
+			2>&1 echo 'The repository exists, but does not point to the correct origin.'
+			exit 1
+		fi
 
-        git -C "$path" checkout -q master
-        git -C "$path" pull
-    else
-        (set -x; git clone "https://$REPO.git" "$path")
-    fi
+		git -C "$path" checkout -q master
+		git -C "$path" pull
+	else
+		(set -x; git clone "https://$REPO.git" "$path")
+	fi
 }
 
 install-deps
