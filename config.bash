@@ -14,6 +14,9 @@ function config {(
 				cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config"
 				)
 			fi ;;
+		'--install')
+			"$PREFIX/src/$REPO/install"
+			return ;;
 	esac
 
 	if [[ -f $PREFIX/etc/$NAME/config ]]; then

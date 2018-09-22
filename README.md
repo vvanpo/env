@@ -7,7 +7,7 @@ configuration files.
 Once installed, you can run `config -l` to see your current configuration.
 Commands for `config` are the same as for `git config`. After editing your
 configuration to add your own files or overwrite current ones, you just need to
-run the installer again (can be done with `$PREFIX/src/$REPO/init`).
+run the installer again (can be done with `config --install`).
 
 ### To do:
 - Git-hooks for linting and ctags.
