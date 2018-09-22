@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Installs dot-files and other initialization/configuration scripts/files into
 # various places in the home directory.
 # Depends on NAME, REPO, and PREFIX environment variables.
