@@ -1,5 +1,6 @@
 alias ls='ls --color=always' l='ls -lah' ll='l | r'
-alias r='less -RSW'
 alias grep='grep -E --color=always'
-alias gits='git status' gitl='git log --oneline -n15'
+alias r='less'
+alias gits='git status'
+alias gitl='git log --oneline -n15'
 alias ps='ps -efjH | r'
