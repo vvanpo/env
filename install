@@ -48,7 +48,7 @@ function install-bash {
 	# Install include scripts and source them.
 	install-includes bash "$lib"
 	for file in $(config --get-all includes.bash.file); do
-		echo ". ${PREFIX}/lib/${NAME}/bash/${file}" >> ~/.bashrc
+		echo ". ${lib}/${file}" >> ~/.bashrc
 	done
 }
 
