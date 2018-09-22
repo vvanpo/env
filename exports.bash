@@ -7,3 +7,5 @@ export XDG_CONFIG_HOME=$prefix/etc
 export GOPATH=$prefix
 export PATH=$prefix/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 export MANPATH=$prefix/share/man:/usr/local/share/man:/usr/share/man
+
+set -o vi

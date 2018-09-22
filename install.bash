@@ -36,13 +36,16 @@ function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
     install-etc inputrc
 
-    # Our .bashrc can't load scripts without knowing the folder hierarchy.
+    # Scripts need access to the folder hierarchy.
     for var in NAME REPO PREFIX; do
-        sed -i -E "s;^(${var,,}=)$;\1${!var};" ~/.bashrc
+        echo "${var,,}=${!var}" >> ~/.bashrc
+        printf '\n' >> ~/.bashrc
     done
 
+    # Install include scripts and source them.
     for file in $(config --get-all includes.bash.file); do
-        install-file "$file" "$PREFIX/lib/$NAME/bash/"
+        install-file "$file" "${PREFIX}/lib/${NAME}/bash/"
+        echo ". ${PREFIX}/lib/${NAME}/bash/${file}" >> ~/.bashrc
     done
 }
 

@@ -9,6 +9,9 @@ function install-deps {
     if [[ $(uname) == 'Darwin' ]]; then
         if [[ -z $(which brew) ]]; then
             /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            # Upgrade to bash 4.
+            (set -x; brew install bash)
+            (set -x; brew install gnu-sed --with-default-names)
             (set -x; brew install git)
             # Needed for `realpath`.
             (set -x; brew install coreutils)
