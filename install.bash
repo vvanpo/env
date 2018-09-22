@@ -1,3 +1,8 @@
+# Installs dot-files and other initialization/configuration scripts/files into
+# various places in the home directory.
+# Depends on NAME, REPO, and PREFIX environment variables.
+
+. "$PREFIX/src/$REPO/config.bash"
 
 function install-file {
     if [[ -e $2 ]] && [[ ! -d $2 ]]; then
@@ -36,11 +41,11 @@ function install-bash {
     install-dot .bashrc .bash_profile .bash_logout
     install-etc inputrc
 
-    # Scripts need access to the folder hierarchy.
+    # Scripts need knowledge of the folder hierarchy.
     for var in NAME REPO PREFIX; do
         echo "${var,,}=${!var}" >> ~/.bashrc
-        printf '\n' >> ~/.bashrc
     done
+    echo >> ~/.bashrc
 
     # Install include scripts and source them.
     for file in $(config --get-all includes.bash.file); do
@@ -49,8 +54,8 @@ function install-bash {
     done
 }
 
-read-config 'user.name' 'Full name'
-read-config 'user.email' 'E-mail'
+request-config 'user.name' 'Full name'
+request-config 'user.email' 'E-mail'
 
 install-dot .tmux.conf .vimrc
 install-git

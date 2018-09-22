@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-readonly NAME='env'
-readonly REPO="github.com/vvanpo/$NAME"
+readonly NAME=env
+readonly REPO=github.com/vvanpo/$NAME
 readonly default_prefix='~/.local'
 export PREFIX NAME REPO
 
@@ -19,16 +19,16 @@ function install-deps {
     fi
 }
 
-# Sets the `$PREFIX` variable.
+# Sets the PREFIX environment variable.
 function set-prefix {
     echo -n "Local installation hierarchy [$default_prefix]: "
     read PREFIX
-    PREFIX="${PREFIX:-$default_prefix}"
-    # Perform tilde expansion as it won't be expanded automatically in a quoted
-    # string.
-    PREFIX="${PREFIX/#~/$HOME}"
+    PREFIX=${PREFIX:-$default_prefix}
+    # Perform manual tilde expansion as it won't be expanded automatically in a
+    # quoted string.
+    PREFIX=${PREFIX/#~/$HOME}
     # Resolve path.
-    PREFIX="$(realpath -ms "$PREFIX")"
+    PREFIX=$(realpath -ms "$PREFIX")
 }
 
 # Pull down the repo, cloning it if it doesn't exist.
@@ -52,5 +52,4 @@ function pull-repo {
 install-deps
 set-prefix
 pull-repo
-. "$PREFIX/src/$REPO/config.bash"
-. "$PREFIX/src/$REPO/install.bash"
+"$PREFIX/src/$REPO/install.bash"

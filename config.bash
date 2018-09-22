@@ -1,3 +1,5 @@
+# Defines functions for manipulating the environment configuration.
+# Depends on NAME, REPO, and PREFIX variables.
 
 function config {(
     local file=$PREFIX/src/$REPO/default.config
@@ -7,7 +9,7 @@ function config {(
     '--add')
         if [[ ! -f $PREFIX/etc/$NAME/config ]]; then
             mkdir -p "$PREFIX/etc/$NAME"
-            cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config"
+            (set -x; cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config")
         fi ;;
     esac
 
@@ -19,12 +21,13 @@ function config {(
 )}
 
 # Reads an input value if the requested config value isn't set.
-function read-config {
+function request-config {
+    local value
+
     if [[ -z $(config --name-only -l | grep -E "^$1$") ]]; then
-        local value
         printf '%s%s%s' "$2" "${3:+ [$3]}" ': '
         read value
-        value="${value:-$3}"
+        value=${value:-$3}
         config --add "$1" "$value"
     fi
 }
