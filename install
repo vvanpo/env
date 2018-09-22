@@ -4,7 +4,11 @@
 # various places in the home directory.
 # Depends on NAME, REPO, and PREFIX environment variables.
 
-. "$PREFIX/src/$REPO/config.bash"
+src=${PREFIX}/src/${REPO}
+etc=${PREFIX}/etc/${NAME}
+lib=${PREFIX}/lib/${NAME}
+
+. "${src}/config.bash"
 
 function install-file {
 	if [[ -e $2 ]] && [[ ! -d $2 ]]; then
@@ -15,34 +19,26 @@ function install-file {
 		mkdir -p "$(dirname "$2")"
 	fi
 
-	(set -x; cp "$PREFIX/src/$REPO/$1" "$2")
+	(set -x; cp "$1" "$2")
 }
 
-# Installs dot-files that live in ~/.
-function install-dot {
-	for file in "$@"; do
-		install-file "$file" ~/"$file"
-	done
-}
+function install-includes {(
+	# Non-absolute paths are relative to the repository.
+	cd "$src"
 
-function install-etc {
-	for file in "$@"; do
-		install-file "$file" "$PREFIX/etc/$NAME/$file"
+	for file in $(config --get-all "includes.$1.file"); do
+		install-file "$file" "$2/"
 	done
-}
+)}
 
 function install-git {
 	rm -f ~/.gitconfig
 	git config --global --add user.name "$(config --get user.name)"
 	git config --global --add user.email "$(config --get user.email)"
-	install-etc gitignore
-	git config --global --add core.excludesfile "$PREFIX/etc/$NAME/gitignore"
+	git config --global --add core.excludesfile "${etc}/gitignore"
 }
 
 function install-bash {
-	install-dot .bashrc .bash_profile .bash_logout
-	install-etc inputrc
-
 	# Include scripts need knowledge of the folder hierarchy.
 	for var in NAME REPO PREFIX; do
 		echo "readonly ${var}=${!var}" >> ~/.bashrc
@@ -50,8 +46,8 @@ function install-bash {
 	echo -e 'export NAME REPO PREFIX\n' >> ~/.bashrc
 
 	# Install include scripts and source them.
+	install-includes bash "$lib"
 	for file in $(config --get-all includes.bash.file); do
-		install-file "$file" "${PREFIX}/lib/${NAME}/bash/"
 		echo ". ${PREFIX}/lib/${NAME}/bash/${file}" >> ~/.bashrc
 	done
 }
@@ -59,6 +55,7 @@ function install-bash {
 request-config 'user.name' 'Full name'
 request-config 'user.email' 'E-mail'
 
-install-dot .tmux.conf .vimrc
-install-git
+install-includes '~' ~
+install-includes etc "$etc"
 install-bash
+install-git

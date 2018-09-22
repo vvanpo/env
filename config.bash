@@ -3,13 +3,16 @@
 
 function config {(
 	local file=$PREFIX/src/$REPO/default.config
-	umask 0077
 
 	case "$1" in
 		'--add')
 			if [[ ! -f $PREFIX/etc/$NAME/config ]]; then
+				(
+				umask 0077
 				mkdir -p "$PREFIX/etc/$NAME"
-				(set -x; cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config")
+				set -x
+				cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config"
+				)
 			fi ;;
 	esac
 
@@ -18,16 +21,16 @@ function config {(
 	fi
 
 	git config -f "$file" "$@"
-	)}
+)}
 
-	# Reads an input value if the requested config value isn't set.
-	function request-config {
-		local value
+# Reads an input value if the requested config value isn't set.
+function request-config {
+	local value
 
-		if [[ -z $(config --name-only -l | grep -E "^$1$") ]]; then
-			printf '%s%s%s' "$2" "${3:+ [$3]}" ': '
-			read value
-			value=${value:-$3}
-			config --add "$1" "$value"
-		fi
-	}
+	if [[ -z $(config --name-only -l | grep -E "^$1$") ]]; then
+		printf '%s%s%s' "$2" "${3:+ [$3]}" ': '
+		read value
+		value=${value:-$3}
+		config --add "$1" "$value"
+	fi
+}
