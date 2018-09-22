@@ -22,12 +22,28 @@ function install-file {
 	(set -x; cp "$1" "$2")
 }
 
+function install-url {(
+	cd "$2"
+
+	local cmd="$(eval "echo $1")"
+	echo "+ curl -fsSLO $cmd"
+	curl -fsSLO "$cmd"
+)}
+
 function install-includes {(
 	# Non-absolute paths are relative to the repository.
 	cd "$src"
 
-	for file in $(config --get-all "includes.$1.file"); do
+	local files urls
+
+	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.$1.file")"
+	for file in "${files[@]}"; do
 		install-file "$file" "$2/"
+	done
+
+	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.$1.url")"
+	for url in "${urls[@]}"; do
+		install-url "$url" "$2/"
 	done
 )}
 
