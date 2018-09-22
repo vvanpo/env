@@ -61,6 +61,9 @@ function install-bash {
 	done
 	echo -e 'export NAME REPO PREFIX\n' >> ~/.bashrc
 
+	# config.bash is always included.
+	(cd $src; install-file "config.bash" "$lib/")
+
 	# Install include scripts and source them.
 	install-includes bash "$lib"
 	for file in $(config --get-all includes.bash.file); do
