@@ -22,7 +22,7 @@ function install-deps {
 
 # Sets the PREFIX environment variable.
 function set-prefix {
-	echo -n "Local installation hierarchy [$default_prefix]: "
+	echo -ne "\e[1;34mLocal installation hierarchy \e[m[$default_prefix]\e[1;34m:\e[m "
 	read PREFIX
 	PREFIX=${PREFIX:-$default_prefix}
 	# Perform manual tilde expansion as it won't be expanded automatically in a

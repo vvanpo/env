@@ -52,7 +52,10 @@ function install-git {
 	rm -f ~/.gitconfig
 	git config --global --add user.name "$(config --get user.name)"
 	git config --global --add user.email "$(config --get user.email)"
-	git config --global --add core.excludesfile "${etc}/gitignore"
+
+	if [[ $(config --get includes.etc.gitignore) ]]; then
+		git config --global --add core.excludesfile "${etc}/gitignore"
+	fi
 }
 
 function install-bash {
@@ -64,7 +67,8 @@ function install-bash {
 	echo -e 'export NAME REPO PREFIX\n' >> ~/.bashrc
 
 	# config.bash is always included.
-	(cd $src; install-file "config.bash" "$lib/")
+	(cd $src; install-file "config.bash" "${lib}/")
+	echo ". ${lib}/config.bash" >> ~/.bashrc
 
 	# Install include scripts and source them.
 	install-includes bash "$lib" | {
@@ -73,6 +77,18 @@ function install-bash {
 			echo ". $path" >> ~/.bashrc
 		done
 	}
+}
+
+# Reads an input value if the requested config value isn't set.
+function request-config {
+	local value
+
+	if [[ -z $(config --name-only -l | grep -E "^$1$") ]]; then
+		printf $'\e[1;34m%s\e[m%s\e[1;34m%s\e[m' "$2" "${3:+ [$3]}" ': '
+		read value
+		value=${value:-$3}
+		config --add "$1" "$value"
+	fi
 }
 
 request-config 'user.name' 'Full name'

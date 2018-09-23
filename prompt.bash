@@ -1,3 +1,11 @@
+reset=$'\[\e[m\]'
+bold=$'\[\e[1m\]'
+red=$'\[\e[31m\]'
+green=$'\[\e[32m\]'
+yellow=$'\[\e[33m\]'
+blue=$'\[\e[34m\]'
+default=$'\[\e[39m\]'
+
 prefix="${bold}${green}\u${reset}:"
 [[ $SSH_CLIENT ]] && prefix="ssh://${bold}${green}\u${default}@${red}\H${reset}:"
 postfix=" ${bold}${blue}\w\n\$${reset} "
