@@ -12,3 +12,5 @@ run the installer again (can be done with `config --install`).
 ### To do:
 - Git-hooks for linting and ctags.
 - OS-specific package manager use to install configured list of programs.
+- Vundle support.
+- Host-specific .vimrc includes.

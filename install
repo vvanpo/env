@@ -30,20 +30,22 @@ function install-url {(
 	curl -fsSLO "$cmd"
 )}
 
+# Takes an include section name and a path to install them in.
+# Prints the list of installed paths.
 function install-includes {(
 	# Non-absolute paths are relative to the repository.
 	cd "$src"
 
-	local files urls
-
 	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.$1.file")"
 	for file in "${files[@]}"; do
 		install-file "$file" "$2/"
+		echo "$2/$(basename "$file")"
 	done
 
 	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.$1.url")"
 	for url in "${urls[@]}"; do
 		install-url "$url" "$2/"
+		echo "$2/$(basename "$url")"
 	done
 )}
 
@@ -56,6 +58,7 @@ function install-git {
 
 function install-bash {
 	# Include scripts need knowledge of the folder hierarchy.
+	local var
 	for var in NAME REPO PREFIX; do
 		echo "readonly ${var}=${!var}" >> ~/.bashrc
 	done
@@ -65,16 +68,18 @@ function install-bash {
 	(cd $src; install-file "config.bash" "$lib/")
 
 	# Install include scripts and source them.
-	install-includes bash "$lib"
-	for file in $(config --get-all includes.bash.file); do
-		echo ". ${lib}/${file}" >> ~/.bashrc
-	done
+	install-includes bash "$lib" | {
+		IFS=$'\n' read -a paths -d ''
+		for path in "${paths[@]}"; do
+			echo ". $paths" >> ~/.bashrc
+		done
+	}
 }
 
 request-config 'user.name' 'Full name'
 request-config 'user.email' 'E-mail'
 
-install-includes '~' ~
-install-includes etc "$etc"
+install-includes '~' ~ > /dev/null
+install-includes etc "$etc" > /dev/null
 install-bash
 install-git
