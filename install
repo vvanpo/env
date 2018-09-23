@@ -35,16 +35,16 @@ function install-includes {(
 	# Non-absolute paths are relative to the repository.
 	cd "$src"
 
-	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.$1.file")"
+	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.${1}.file")"
 	for file in "${files[@]}"; do
-		install-file "$file" "$2/"
-		echo "$2/$(basename "$file")"
+		install-file "$file" "${2}/"
+		echo "${2}/$(basename "$file")"
 	done
 
 	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.$1.url")"
 	for url in "${urls[@]}"; do
-		install-url "$url" "$2/"
-		echo "$2/$(basename "$url")"
+		install-url "$url" "${2}/"
+		echo "${2}/$(basename "$url")"
 	done
 )}
 
@@ -83,7 +83,7 @@ function install-bash {
 function request-config {
 	local value
 
-	if [[ -z $(config --name-only -l | grep -E "^$1$") ]]; then
+	if [[ -z $(config --name-only -l | grep -E "^${1}$") ]]; then
 		printf $'\e[1;34m%s\e[m%s\e[1;34m%s\e[m' "$2" "${3:+ [$3]}" ': '
 		read value
 		value=${value:-$3}
