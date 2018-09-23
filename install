@@ -53,7 +53,7 @@ function install-git {
 	git config --global --add user.name "$(config --get user.name)"
 	git config --global --add user.email "$(config --get user.email)"
 
-	if [[ $(config --get includes.etc.gitignore) ]]; then
+	if [[ $(config --get-all includes.etc.file | grep '^gitignore$') ]]; then
 		git config --global --add core.excludesfile "${etc}/gitignore"
 	fi
 }
