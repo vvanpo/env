@@ -26,8 +26,7 @@ function install-url {(
 	cd "$2"
 
 	local cmd="$(eval "echo $1")"
-	echo "+ curl -fsSLO $cmd"
-	curl -fsSLO "$cmd"
+	(set -x; curl -fsSLO "$cmd")
 )}
 
 # Takes an include section name and a path to install them in.
@@ -71,7 +70,7 @@ function install-bash {
 	install-includes bash "$lib" | {
 		IFS=$'\n' read -a paths -d ''
 		for path in "${paths[@]}"; do
-			echo ". $paths" >> ~/.bashrc
+			echo ". $path" >> ~/.bashrc
 		done
 	}
 }
