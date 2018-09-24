@@ -64,7 +64,7 @@ function install-bash {
 	for var in NAME REPO PREFIX; do
 		echo "readonly ${var}=${!var}" >> ~/.bashrc
 	done
-	echo -e 'export NAME REPO PREFIX\n' >> ~/.bashrc
+	echo $'export NAME REPO PREFIX\n' >> ~/.bashrc
 
 	# config.bash is always included.
 	(cd $src; install-file "config.bash" "${lib}/")
