@@ -6,14 +6,12 @@ function config {(
 
 	case "$1" in
 		'--add')
-			if [[ ! -f $PREFIX/etc/$NAME/config ]]; then
-				(
+			if [[ ! -f $PREFIX/etc/$NAME/config ]]; then (
 				umask 0077
 				mkdir -p "$PREFIX/etc/$NAME"
 				set -x
 				cp "$PREFIX/src/$REPO/default.config" "$PREFIX/etc/$NAME/config"
-				)
-			fi ;;
+			) fi ;;
 		'--install')
 			"$PREFIX/src/$REPO/install"
 			return ;;
