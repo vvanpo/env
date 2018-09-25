@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Defines config function for manipulating the environment configuration.
+# Depends on NAME, REPO, and PREFIX environment variables.
+
+if [[ -v $NAME ]] || [[ -v $REPO ]] || [[ -v $PREFIX ]]; then
+	>&2 echo $'\e[1;31mMust have defined NAME, REPO, and PREFIX environment variables.\e[m'
+	exit 1
+fi
+
+path=$PREFIX/etc/$NAME
+file=$PREFIX/src/$REPO/default.config
+
+case "$1" in
+	'--add')
+		if [[ ! -f $path/config ]]; then (
+			umask 0077
+			mkdir -p "$path"
+			set -x
+			cp "$file" "$path/config"
+		) fi ;;
+	'--install')
+		"$PREFIX/src/$REPO/install"
+		return ;;
+esac
+
+if [[ -f $path/config ]]; then
+	file=$path/config
+fi
+
+git config -f "$file" "$@"

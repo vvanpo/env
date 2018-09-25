@@ -7,8 +7,7 @@
 src=${PREFIX}/src/${REPO}
 etc=${PREFIX}/etc/${NAME}
 lib=${PREFIX}/lib/${NAME}
-
-. "${src}/config.bash"
+bin=${PREFIX}/bin
 
 function install-file {
 	if [[ ! -f $1 ]]; then
@@ -72,10 +71,6 @@ function install-bash {
 	done
 	echo $'export NAME REPO PREFIX\n' >> ~/.bashrc
 
-	# config.bash is always included.
-	(cd $src; install-file "config.bash" "${lib}/")
-	echo ". ${lib}/config.bash" >> ~/.bashrc
-
 	# Install include scripts and source them.
 	install-includes bash "$lib" | {
 		IFS=$'\n' read -a paths -d ''
@@ -89,7 +84,7 @@ function install-bash {
 function request-config {
 	local value
 
-	if [[ -z $(config --name-only -l | grep -E "^${1}$") ]]; then
+	if [[ -z $("$src/config" --name-only -l | grep -E "^${1}$") ]]; then
 		printf $'\e[1;34m%s\e[m%s\e[1;34m%s\e[m' "$2" "${3:+ [$3]}" ': '
 		read value
 		value=${value:-$3}
@@ -100,6 +95,7 @@ function request-config {
 request-config 'user.name' 'Full name'
 request-config 'user.email' 'E-mail'
 
+install-file "${src}/config" "${bin}/"
 install-includes '~' ~ > /dev/null
 install-includes etc "$etc" > /dev/null
 install-bash
