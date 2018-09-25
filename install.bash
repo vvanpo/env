@@ -1,29 +1,11 @@
-# Defines utilities to install files and urls into configured places.
+# Installs dot-files and other initialization/configuration scripts/files into
+# various places in the home directory.
 # Depends on NAME, REPO, and PREFIX environment variables.
 
 src=${PREFIX}/src/${REPO}
 etc=${PREFIX}/etc/${NAME}
 lib=${PREFIX}/lib/${NAME}
 bin=${PREFIX}/bin
-
-# Takes an include section name and a path to install them in.
-# Prints the list of installed paths.
-function install-includes {(
-	# Non-absolute paths are relative to the repository.
-	cd "$src"
-
-	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.${1}.file")"
-	for file in "${files[@]}"; do
-		install-file "$file" "${2}/"
-		echo "${2}/$(basename "$file")"
-	done
-
-	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.${1}.url")"
-	for url in "${urls[@]}"; do
-		install-url "$url" "${2}/"
-		echo "${2}/$(basename "$url")"
-	done
-)}
 
 function install-file {
 	if [[ ! -f $1 ]]; then
@@ -48,6 +30,25 @@ function install-url {(
 
 	local cmd="$(eval "echo $1")"
 	(set -x; curl -fsSLO "$cmd")
+)}
+
+# Takes an include section name and a path to install them in.
+# Prints the list of installed paths.
+function install-includes {(
+	# Non-absolute paths are relative to the repository.
+	cd "$src"
+
+	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.${1}.file")"
+	for file in "${files[@]}"; do
+		install-file "$file" "${2}/"
+		echo "${2}/$(basename "$file")"
+	done
+
+	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.$1.url")"
+	for url in "${urls[@]}"; do
+		install-url "$url" "${2}/"
+		echo "${2}/$(basename "$url")"
+	done
 )}
 
 function install-git {
@@ -89,7 +90,7 @@ function request-config {
 	fi
 }
 
-function install {(
+function install {
 	request-config 'user.name' 'Full name'
 	request-config 'user.email' 'E-mail'
 
@@ -98,11 +99,4 @@ function install {(
 	install-includes etc "$etc" > /dev/null
 	install-bash
 	install-git
-
-	cd "$src"
-
-	IFS=$'\n' read -a scripts -d '' <<< "$(config --get-all "includes.script")"
-	for script in "${scripts[@]}"; do
-		"$(realpath "$script")"
-	done
-)}
+}

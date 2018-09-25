@@ -20,7 +20,8 @@ case "$1" in
 			cp "$file" "$path/config"
 		) fi ;;
 	'--install')
-		"$PREFIX/src/$REPO/install"
+		. "$PREFIX/src/$REPO/install.bash"
+		install
 		return ;;
 esac
 
