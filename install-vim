@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 . "${src}/install.bash"
+rm -f ~/.vimrc
 
 install-includes vim "$etc" | {
 	IFS=$'\n' read -a paths -d ''
