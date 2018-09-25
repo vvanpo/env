@@ -9,6 +9,11 @@ Commands for `config` are the same as for `git config`. After editing your
 configuration to add your own files or overwrite current ones, you just need to
 run the installer again (can be done with `config --install`).
 
+For example, to source a script from your `.bashrc`, run
+`config --add includes.bashrc.files <path-to-script>` followed by
+`config --install`. To ensure one script runs before another, change its order
+within your config file (`vi "$PREFIX/etc/$NAME/config"`).
+
 ### To do:
 - Git-hooks for linting and ctags.
 - OS-specific package manager use to install configured list of programs.
