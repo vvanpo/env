@@ -21,8 +21,8 @@ case "$1" in
 		) fi ;;
 	'--install')
 		. "$PREFIX/src/$REPO/install.bash"
-		install
-		return ;;
+		install-all
+		exit ;;
 esac
 
 if [[ -f $path/config ]]; then

@@ -90,13 +90,21 @@ function request-config {
 	fi
 }
 
-function install {
+function install-all {(
 	request-config 'user.name' 'Full name'
 	request-config 'user.email' 'E-mail'
 
-	install-file "${src}/config" "${bin}/"
+	cd "$src"
+	install-file "config" "${bin}/"
+
 	install-includes '~' ~ > /dev/null
 	install-includes etc "$etc" > /dev/null
 	install-bash
 	install-git
-}
+
+	export src etc lib bin
+	IFS=$'\n' read -a scripts -d '' <<< "$(config --get-all "includes.script")"
+	for script in "${scripts[@]}"; do
+		"$(realpath "$script")"
+	done
+)}

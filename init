@@ -54,4 +54,4 @@ install-deps
 set-prefix
 pull-repo
 . "$PREFIX/src/$REPO/install.bash"
-install
+install-all

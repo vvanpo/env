@@ -2,4 +2,9 @@
 
 . "${src}/install.bash"
 
-install-includes vim
+install-includes vim "$etc" | {
+	IFS=$'\n' read -a paths -d ''
+	for path in "${paths[@]}"; do
+		echo "source $path" >> ~/.vimrc
+	done
+}

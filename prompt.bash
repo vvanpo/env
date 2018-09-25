@@ -18,7 +18,6 @@ PROMPT_DIRTRIM=3
 
 # Sets the prompt for `sudo su`.
 export SUDO_PS1=${prefix}${postfix}
-unset prefix postfix
 
 # Displays a '*' or '+' for unstaged or staged changes.
 GIT_PS1_SHOWDIRTYSTATE=true
@@ -26,3 +25,5 @@ GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWSTASHSTATE=true
 # Displays a '%' for untracked files.
 GIT_PS1_SHOWUNTRACKEDFILES=true
+
+unset prefix postfix reset bold red green yellow blue default
