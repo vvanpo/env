@@ -27,6 +27,7 @@ function install-file {
 }
 
 function install-url {(
+	mkdir -p "$2"
 	cd "$2"
 
 	local url="$(eval "echo $1")"
@@ -39,25 +40,25 @@ function install-includes {(
 	# Non-absolute paths are relative to the repository.
 	cd "$src"
 
-	config --get-all "includes.${1}.file" |
-	while read file; do
-		install-file "$file" "${2}/"
-		echo "${2}/$(basename "$file")"
-	done
+	"${src}/config" --get-all "includes.${1}.file" |
+		while read file; do
+			install-file "$file" "${2}/"
+			echo "${2}/$(basename "$file")"
+		done
 
-	IFS=$'\n' read -a urls -d '' <<< "$(config --get-all "includes.$1.url")"
-	for url in "${urls[@]}"; do
-		install-url "$url" "${2}/"
-		echo "${2}/$(basename "$url")"
-	done
+	"${src}/config" --get-all "includes.${1}.url" |
+		while read url; do
+			install-url "$url" "${2}/"
+			echo "${2}/$(basename "$url")"
+		done
 )}
 
 function install-git {
 	rm -f ~/.gitconfig
-	git config --global --add user.name "$(config --get user.name)"
-	git config --global --add user.email "$(config --get user.email)"
+	git config --global --add user.name "$("${src}/config" --get user.name)"
+	git config --global --add user.email "$("${src}/config" --get user.email)"
 
-	if [[ $(config --get-all includes.etc.file | grep '^gitignore$') ]]; then
+	if [[ $("${src}/config" --get-all includes.etc.file | grep '^gitignore$') ]]; then
 		git config --global --add core.excludesfile "${etc}/gitignore"
 	fi
 }
@@ -81,11 +82,11 @@ function install-bash {
 function request-config {
 	local value
 
-	if [[ -z $("$src/config" --name-only -l | grep -E "^${1}$") ]]; then
+	if [[ -z $("${src}/config" --name-only -l | grep -E "^${1}$") ]]; then
 		printf $'\e[1;34m%s\e[m%s\e[1;34m%s\e[m' "$2" "${3:+ [$3]}" ': '
 		read value
 		value=${value:-$3}
-		"${src}" config --add "$1" "$value"
+		"${src}/config" --add "$1" "$value"
 	fi
 }
 
