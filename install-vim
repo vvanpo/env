@@ -3,9 +3,7 @@
 . "${src}/install.bash"
 rm -f ~/.vimrc
 
-install-includes vim "$etc" | {
-	IFS=$'\n' read -a paths -d ''
-	for path in "${paths[@]}"; do
-		echo "source $path" >> ~/.vimrc
+"${src}/config" --get-all includes.vim.source |
+	while read path; do
+		echo "source $(realpath "$path")" >> ~/.vimrc
 	done
-}

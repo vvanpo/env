@@ -8,21 +8,22 @@ lib=${PREFIX}/lib/${NAME}
 bin=${PREFIX}/bin
 
 function install-file {
-	if [[ ! -f $1 ]]; then
+	local source=${1/#~/~}
+
+	if [[ ! -f $source ]]; then
 		>&2 echo $'\e[1;31m'"$1 is not a valid file."$'\e[m'
 		return 1
 	fi
 
 	# Check if the target is a directory.
 	if [[ ${2%%/} != $2 ]] || [[ -d $2 ]]; then
-		local filename=$(basename "$1")
 		mkdir -p "$2"
-		rm -f "$2/$filename"
+		rm -f "$2/$(basename "$source")"
 	elif [[ -e $2 ]]; then
 		rm -f "$2"
 	fi
 
-	(set -x; cp "$1" "$2")
+	(set -x; cp "$source" "$2")
 }
 
 function install-url {(
@@ -71,8 +72,7 @@ function install-bash {
 
 	# Install include scripts and source them.
 	install-includes bash "$lib" | {
-		IFS=$'\n' read -a paths -d ''
-		for path in "${paths[@]}"; do
+		while read path; do
 			echo ". $path" >> ~/.bashrc
 		done
 	}
@@ -86,7 +86,7 @@ function request-config {
 		printf $'\e[1;34m%s\e[m%s\e[1;34m%s\e[m' "$2" "${3:+ [$3]}" ': '
 		read value
 		value=${value:-$3}
-		config --add "$1" "$value"
+		"${src}" config --add "$1" "$value"
 	fi
 }
 
@@ -103,8 +103,8 @@ function install-all {(
 	install-git
 
 	export src etc lib bin
-	IFS=$'\n' read -a scripts -d '' <<< "$(config --get-all "includes.script")"
-	for script in "${scripts[@]}"; do
-		"$(realpath "$script")"
-	done
+	"${src}/config" --get-all "includes.script" |
+		while read script; do
+			"$(realpath "$script")"
+		done
 )}
