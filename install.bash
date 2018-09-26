@@ -29,8 +29,8 @@ function install-file {
 function install-url {(
 	cd "$2"
 
-	local cmd="$(eval "echo $1")"
-	(set -x; curl -fsSLO "$cmd")
+	local url="$(eval "echo $1")"
+	(set -x; curl -fsSLO "$url")
 )}
 
 # Takes an include section name and a path to install them in.
@@ -39,8 +39,8 @@ function install-includes {(
 	# Non-absolute paths are relative to the repository.
 	cd "$src"
 
-	IFS=$'\n' read -a files -d '' <<< "$(config --get-all "includes.${1}.file")"
-	for file in "${files[@]}"; do
+	config --get-all "includes.${1}.file" |
+	while read file; do
 		install-file "$file" "${2}/"
 		echo "${2}/$(basename "$file")"
 	done
@@ -71,11 +71,10 @@ function install-bash {
 	echo $'export NAME REPO PREFIX\n' >> ~/.bashrc
 
 	# Install include scripts and source them.
-	install-includes bash "$lib" | {
+	install-includes bash "$lib" |
 		while read path; do
 			echo ". $path" >> ~/.bashrc
 		done
-	}
 }
 
 # Reads an input value if the requested config value isn't set.
@@ -91,19 +90,19 @@ function request-config {
 }
 
 function install-all {(
+	cd "$src"
+
 	request-config 'user.name' 'Full name'
 	request-config 'user.email' 'E-mail'
 
-	cd "$src"
 	install-file "config" "${bin}/"
-
 	install-includes '~' ~ > /dev/null
 	install-includes etc "$etc" > /dev/null
 	install-bash
 	install-git
 
 	export src etc lib bin
-	"${src}/config" --get-all "includes.script" |
+	"./config" --get-all "includes.script" |
 		while read script; do
 			"$(realpath "$script")"
 		done
