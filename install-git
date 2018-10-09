@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+. "${src}/install.bash"
+rm -f ~/.gitconfig
+
+git config --global --add user.name "$("${src}/config" --get user.name)"
+git config --global --add user.email "$("${src}/config" --get user.email)"
+
+if [[ $("${src}/config" --get-all includes.etc.file | grep '^gitignore$') ]]; then
+    git config --global --add core.excludesfile "${src}/gitignore"
+fi

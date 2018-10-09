@@ -53,16 +53,6 @@ function install-includes {(
 		done
 )}
 
-function install-git {
-	rm -f ~/.gitconfig
-	git config --global --add user.name "$("${src}/config" --get user.name)"
-	git config --global --add user.email "$("${src}/config" --get user.email)"
-
-	if [[ $("${src}/config" --get-all includes.etc.file | grep '^gitignore$') ]]; then
-		git config --global --add core.excludesfile "${etc}/gitignore"
-	fi
-}
-
 function install-bash {
 	# Include scripts need knowledge of the folder hierarchy.
 	local var
@@ -100,7 +90,6 @@ function install-all {(
 	install-includes '~' ~ > /dev/null
 	install-includes etc "$etc" > /dev/null
 	install-bash
-	install-git
 
 	export src etc lib bin
 	"./config" --get-all "includes.script" |
