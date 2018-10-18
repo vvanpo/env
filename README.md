@@ -18,3 +18,5 @@ within your config file (`vi "$PREFIX/etc/$NAME/config"`).
 - Git-hooks for linting and ctags.
 - OS-specific package manager use to install configured list of programs.
 - Vundle support.
+- Fix symbolic-linking.
+- Properly trap errors.
