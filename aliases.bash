@@ -5,4 +5,4 @@ alias grep='grep -E --color=always'
 alias ps='ps -efjH | less'
 
 alias gits='git status'
-alias gitl='git log --oneline -n15'
+alias gitd='git diff HEAD'
