@@ -3,10 +3,12 @@
 . "${src}/install.bash"
 rm -f ~/.gitconfig
 
-git config --global user.name "$("${src}/config" --get user.name)"
-git config --global user.email "$("${src}/config" --get user.email)"
+git config --global user.name "$("${src}/config" user.name)"
+git config --global user.email "$("${src}/config" user.email)"
 git config --global log.date local
+git config --global init.templatedir "${src}/git_template"
+git config --global alias.ctags "${src}/git-ctags"
 
 if [[ $("${src}/config" --get-all includes.etc.file | grep '^gitignore$') ]]; then
-    git config --global --add core.excludesfile "${src}/gitignore"
+    git config --global core.excludesfile "${src}/gitignore"
 fi
