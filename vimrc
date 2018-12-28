@@ -28,6 +28,7 @@ set textwidth=80
 
 set foldmethod=indent
 set foldnestmax=5
+set foldlevelstart=5
 set backspace=2
 
 filetype plugin indent on
