@@ -34,7 +34,7 @@ set backspace=2
 filetype plugin indent on
 
 au BufRead,BufNewFile *.tmpl set filetype=html
-au BufRead,BufNewFile *.vue set filetype=js
+au BufRead,BufNewFile *.vue set filetype=html
 
 au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
