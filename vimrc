@@ -8,6 +8,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'fatih/vim-go'
 Plugin 'leafgarland/typescript-vim'
+Plugin 'posva/vim-vue'
+Plugin 'editorconfig/editorconfig-vim'
 call vundle#end()
 
 syntax on
@@ -27,7 +29,6 @@ set shiftwidth=4
 set textwidth=80
 
 set foldmethod=indent
-set foldnestmax=5
 set foldlevelstart=5
 set backspace=2
 
