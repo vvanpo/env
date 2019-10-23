@@ -38,7 +38,7 @@ au BufRead,BufNewFile *.tmpl set filetype=html
 
 au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
-au FileType sh,markdown setlocal textwidth&
+au FileType sh setlocal textwidth&
 
 " ctags
 set tags=tags;/
