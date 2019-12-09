@@ -10,6 +10,7 @@ Plugin 'fatih/vim-go'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'posva/vim-vue'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'rust-lang/rust.vim'
 call vundle#end()
 
 syntax on
