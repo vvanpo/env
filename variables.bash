@@ -1,6 +1,6 @@
 XDG_DATA_HOME=$PREFIX/share
 XDG_CONFIG_HOME=$PREFIX/etc
-PATH=$PREFIX/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PATH=$PREFIX/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 GOPATH=$PREFIX
 MANPATH=$PREFIX/share/man:/usr/local/share/man:/usr/share/man
 EDITOR=vim
