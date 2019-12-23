@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+extensions=(
+	bash
+	bash_logout
+	bash_profile
+	bashrc
+	sh
+)
+exts_pattern=$(printf '|%s' "${extensions[@]}")
+exts_pattern="\.(${exts_pattern#|})$"
+readonly extensions exts_pattern
+
+paths=()
+
+for path in $(git ls-files); do
+	file=$(basename "$path")
+
+	if [[ -x $file || $file =~ $exts_pattern ]]; then
+		paths+=("$path")
+	fi
+done
+
+shellcheck "${paths[@]}"
