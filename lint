@@ -22,3 +22,4 @@ for path in $(git ls-files); do
 done
 
 shellcheck "${paths[@]}"
+shfmt -d "${paths[@]}"
