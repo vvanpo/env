@@ -4,13 +4,13 @@ filetype off
 " Call :PluginInstall after changing these.
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-fugitive'
+Plugin 'editorconfig/editorconfig-vim'
 Plugin 'fatih/vim-go'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'posva/vim-vue'
-Plugin 'editorconfig/editorconfig-vim'
 Plugin 'rust-lang/rust.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'VundleVim/Vundle.vim'
 call vundle#end()
 
 syntax on
