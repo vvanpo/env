@@ -4,6 +4,7 @@ filetype off
 " Call :PluginInstall after changing these.
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+Plugin '907th/vim-auto-save'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'fatih/vim-go'
 Plugin 'leafgarland/typescript-vim'
@@ -43,3 +44,6 @@ au FileType sh setlocal textwidth&
 
 " ctags
 set tags=tags;/
+
+" AutoSave
+let g:auto_save = 1
