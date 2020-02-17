@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
+# https://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
 
-set -e
-dir=$(git rev-parse --git-dir)
-trap 'rm -f "${dir}/tags.$$"' EXIT INT TERM
-git ls-files | ctags --tag-relative -L - -f "${dir}/tags.$$"
-mv "${dir}/tags.$$" "${dir}/tags"
+shopt -s nullglob
+
+file=$(git rev-parse --git-dir)/tags
+
+# Kill existing ctags instances to prevent my laptop from becoming an aircraft
+# carrier.
+for f in ${file}.*; do
+	kill "${f#${file}.}"
+done
+
+git ls-files | (
+	tmp=${file}.${BASHPID}
+	&>/dev/null ctags --tag-relative -L- -f"$tmp" &
+	ctags_pid=$!
+	trap 'kill "$ctags_pid"; rm "$tmp"' TERM
+	wait && mv "$tmp" "$file"
+) &
