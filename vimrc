@@ -5,6 +5,7 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin '907th/vim-auto-save'
+Plugin 'dense-analysis/ale'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'fatih/vim-go'
 Plugin 'leafgarland/typescript-vim'
@@ -37,6 +38,8 @@ set backspace=2
 filetype plugin indent on
 
 au BufRead,BufNewFile *.tmpl set filetype=html
+au BufRead,BufNewFile *.cjs set filetype=javascript
+au BufRead,BufNewFile *.mjs set filetype=javascript
 
 au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
@@ -47,3 +50,9 @@ set tags=tags;/
 
 " AutoSave
 let g:auto_save = 1
+
+let g:ale_fixers = {
+\   'css': ['stylelint', 'prettier'],
+\   'javascript': ['eslint', 'prettier'],
+\}
+let g:ale_set_highlights = 0
