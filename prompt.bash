@@ -6,7 +6,7 @@ yellow=$'\[\e[33m\]'
 blue=$'\[\e[34m\]'
 default=$'\[\e[39m\]'
 
-prefix="${bold}${green}\u${reset}:"
+prefix="${yellow}\D{%H:%M} ${bold}${green}\u${reset}:"
 [[ $SSH_CLIENT ]] && prefix="ssh://${bold}${green}\u${default}@${red}\H${reset}:"
 postfix=" ${bold}${blue}\w\n\$${reset} "
 
