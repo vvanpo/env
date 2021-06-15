@@ -1,8 +1,7 @@
 # Bash aliases for the GNU userland.
 
-alias ls='ls --color=always' l='ls -lah' ll='l | less'
-alias grep='grep -E --color=always'
-alias ps='ps -efjH | less'
+alias l='exa -al --color-scale --color always | less -F'
+alias ps='ps -efjH | less -F'
 
 alias gitd='git diff HEAD'
 alias gitf='git fetch --prune'
