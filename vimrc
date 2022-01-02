@@ -35,6 +35,10 @@ set foldmethod=indent
 set foldlevelstart=5
 set backspace=2
 
+" https://unix.stackexchange.com/a/5313
+set visualbell
+set t_vb=
+
 filetype plugin indent on
 
 au BufRead,BufNewFile *.tmpl set filetype=html
