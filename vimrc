@@ -50,7 +50,7 @@ au FileType c,h setlocal cindent
 au FileType sh setlocal textwidth&
 
 " ctags
-set tags=tags;/
+set tags^=.git/tags;
 
 " AutoSave
 let g:auto_save = 1

@@ -1,5 +1,2 @@
 # Vim swap files
 *.swp
-
-# Ctags index file
-/tags
