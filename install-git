@@ -9,7 +9,6 @@ git config --global log.date local
 git config --global init.templatedir "${src}/git_template"
 git config --global rebase.autosquash true
 git config --global pull.ff only
-git config --global alias.ctags "!${src}/git-ctags"
 
 if [[ $("${src}/config" --get-all includes.etc.file | grep '^gitignore$') ]]; then
     git config --global core.excludesfile "${src}/gitignore"

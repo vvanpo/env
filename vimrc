@@ -13,6 +13,7 @@ Plugin 'posva/vim-vue'
 Plugin 'rust-lang/rust.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'ludovicchabant/vim-gutentags'
 call vundle#end()
 
 syntax on
@@ -48,9 +49,6 @@ au BufRead,BufNewFile *.mjs set filetype=javascript
 au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
 au FileType sh setlocal textwidth&
-
-" ctags
-set tags^=.git/tags;
 
 " AutoSave
 let g:auto_save = 1
