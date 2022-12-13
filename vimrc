@@ -48,7 +48,7 @@ au BufRead,BufNewFile *.mjs set filetype=javascript
 
 au FileType sh,sql,go setlocal noexpandtab
 au FileType c,h setlocal cindent
-au FileType sh setlocal textwidth&
+au FileType html,sh setlocal textwidth&
 
 " AutoSave
 let g:auto_save = 1
