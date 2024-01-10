@@ -6,7 +6,6 @@ rm -f ~/.gitconfig
 git config --global user.name "$("${src}/config" user.name)"
 git config --global user.email "$("${src}/config" user.email)"
 git config --global log.date local
-git config --global init.templatedir "${src}/git_template"
 git config --global rebase.autosquash true
 git config --global pull.ff only
 
