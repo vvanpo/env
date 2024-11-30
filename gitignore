@@ -2,4 +2,9 @@
 *.swp
 
 # Ctags
-tags
+/tags
+/tags.temp
+/tags.lock
+
+# Intellij
+/.run

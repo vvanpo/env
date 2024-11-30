@@ -22,15 +22,21 @@ set viminfo=""
 
 set ruler
 set number
-set showbreak=..
 set hlsearch
+
+" Auto-wrap everything past 80 chars
+set columns=80
+" textwidth causes automatic linebreaks:
+" set textwidth=80
+set linebreak
+set wrap
+set showbreak=..
 
 set autoindent
 set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-set textwidth=80
 
 set foldmethod=indent
 set foldlevelstart=5
